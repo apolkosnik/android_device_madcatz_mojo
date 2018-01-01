@@ -1,2 +1,2 @@
-add_lunch_combo lineage_mojo-eng
-add_lunch_combo lineage_mojo-userdebug
+add_lunch_combo omni_mojo-eng
+add_lunch_combo omni_mojo-userdebug

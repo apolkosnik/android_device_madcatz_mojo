@@ -1,0 +1,11 @@
+[
+ {
+   "repository": "android_vendor_madcatz_mojo",
+   "target_path": "vendor/madcatz/mojo"
+ },
+ {
+   "repository": "android_kernel_madcatz_mojo",
+   "target_path": "kernel/madcatz/mojo"
+ }
+]
+ 
