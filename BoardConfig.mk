@@ -35,10 +35,12 @@ TARGET_TEGRA_VERSION := t114
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=mojo androidboot.selinux=permissive smsc95xx.boot_wol_config=0x07 smsc95xx.turbo_mode=N
 TARGET_KERNEL_SOURCE := kernel/madcatz/mojo
-TARGET_KERNEL_CONFIG := lineageos_mojo_defconfig
+TARGET_KERNEL_CONFIG := tegra11_mojo_android_defconfig
 LZMA_RAMDISK_TARGETS := recovery
 TARGET_KERNEL_HAVE_EXFAT := true
 TARGET_KERNEL_HAVE_NTFS := true
+KERNEL_TOOLCHAIN_PREFIX := arm-linux-androideabi-
+KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-linux-androideabi-4.9/bin
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -56,7 +58,7 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR ?= device/madcatz/mojo/bluetooth
 USE_OPENGL_RENDERER := true
 SF_VSYNC_EVENT_PHASE_OFFSET_NS := 5000000
 VSYNC_EVENT_PHASE_OFFSET_NS := 7500000
-COMMON_GLOBAL_CFLAGS += -DDISABLE_ASHMEM_TRACKING
+#COMMON_GLOBAL_CFLAGS += -DDISABLE_ASHMEM_TRACKING
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
@@ -76,13 +78,12 @@ TARGET_POWERHAL_VARIANT := tegra
 TARGET_RELEASE_CPPFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
 # Recovery
-COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
+BOARD_NO_SECURE_DISCARD := true
 TARGET_RECOVERY_FSTAB := device/madcatz/mojo/rootdir/etc/fstab.mojo
 TARGET_RECOVERY_DEVICE_DIRS += device/madcatz/mojo
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 # TWRP (being included with the stuff in "Recovery")
 TW_THEME := landscape_hdpi
-#RECOVERY_GRAPHICS_FORCE_USE_LINELENGTH := true
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_NO_SCREEN_TIMEOUT := true
@@ -91,8 +92,7 @@ TW_NO_CPU_TEMP := true
 TW_BRIGHTNESS_PATH := "/brightness"
 TW_NO_BATT_PERCENT := true
 TW_EXCLUDE_SUPERSU := true
-
-#TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO := true
 
 # SELinux
 BOARD_SEPOLICY_DIRS += \
@@ -109,4 +109,4 @@ WIFI_DRIVER_FW_PATH_PARAM        := "/sys/module/bcm43241/parameters/firmware_pa
 WIFI_DRIVER_FW_PATH_AP           := "/system/vendor/firmware/bcm43241/fw_bcmdhd_apsta.bin"
 WIFI_DRIVER_FW_PATH_STA          := "/system/vendor/firmware/bcm43241/fw_bcmdhd.bin"
 
-MALLOC_IMPL := dlmalloc
+MALLOC_SVELTE := true

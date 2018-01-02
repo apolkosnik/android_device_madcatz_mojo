@@ -125,4 +125,8 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libdgv1
 
+# Needed in recovery
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/recovery/root/etc/twrp.fstab:recovery/root/etc/twrp.fstab
+
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
