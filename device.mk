@@ -80,10 +80,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/com.nvidia.nvsi.xml:system/etc/permissions/com.nvidia.nvsi.xml
 
-# Pad
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/keychars/Generic.kcm:system/usr/keychars/Generic.kcm
-
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
     hostapd \
