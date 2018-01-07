@@ -13,7 +13,7 @@ on early-init
 
 on init
 
-    export LD_SHIM_LIBS "/system/lib/libnvcpud.so|libshim_vectorimpl.so:/system/lib/hw/audio_policy.tegra.so|libshim_vectorimpl.so:/system/lib/libicuuc.so|libshim_icu.so"
+    export LD_SHIM_LIBS "/system/lib/hw/audio_policy.tegra.so|libshim_vectorimpl.so:/system/lib/libicuuc.so|libshim_icu.so"
 
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
@@ -74,7 +74,9 @@ on boot
     chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
 
     # Power management settings
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/no_lp 0
+    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/no_lp 1
+
+    write /d/scaling/use_throughput_hint 0
 
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor conservative
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor conservative
@@ -88,18 +90,13 @@ on boot
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 696000
-    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "75 228000:85 696000:90 1530000:95"
-    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay "20000 1530000:50000"
-
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/no_lp 0
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/down_delay 500
+    write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
+    write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 85
     write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/enable 1
     write /sys/devices/system/cpu/cpuquiet/current_governor runnable
     write /sys/module/cpuidle_t11x/parameters/cpu_power_gating_in_idle 31
     write /sys/module/cpuidle_t11x/parameters/slow_cluster_power_gating_noncpu 1
-    write /sys/module/cpuidle/parameters/power_down_in_idle 1
+    write /sys/module/cpuidle/parameters/power_down_in_idle 0
 
     chown system system /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/no_lp
     chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
@@ -240,17 +237,6 @@ service wbtmiscwriter /system/bin/wbtmiscwriter.sh
 on property:init.svc.hciattach=stopped
     write /sys/devices/platform/reg-userspace-consumer.1/state disabled
 
-# Enable NvCpuD, and set it to never poll config again
-on boot
-    setprop nvcpud.enabled true
-    setprop nvcpud.config_refresh_ms -1
-
-service nvcpud /system/bin/nvcpud
-    class main
-    user system
-    group system
-    oneshot
-
 # create filesystems if necessary
 service setup_fs /system/bin/setup_fs \
         /dev/block/platform/sdhci-tegra.3/by-name/UDA \
@@ -259,25 +245,6 @@ service setup_fs /system/bin/setup_fs \
     user root
     group root
     oneshot
-
-# unified scaling setup
-service ussr_setup /system/bin/ussr_setup.sh
-    class main
-    user root
-    group root
-    oneshot
-
-# unified scaling process
-service ussrd /system/bin/ussrd
-    user system
-    group system
-    class main
-
-# unified scaling watchdog process
-service usdwatchdog /system/bin/usdwatchdog --wait 30
-    user system
-    group system
-    class main
 
 # start tf_daemon service
 service tf_daemon /system/bin/tf_daemon -storageDir /data/tf -d

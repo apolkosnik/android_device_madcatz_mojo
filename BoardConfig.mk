@@ -30,9 +30,12 @@ TARGET_BOOTLOADER_BOARD_NAME := mojo
 TARGET_NO_BOOTLOADER := true
 
 # Kernel
-BOARD_KERNEL_CMDLINE := androidboot.hardware=mojo androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=mojo androidboot.selinux=permissive smsc95xx.boot_wol_config=0x07 smsc95xx.turbo_mode=N
 TARGET_KERNEL_SOURCE := kernel/madcatz/mojo
 TARGET_KERNEL_CONFIG := tegra11_mojo_android_defconfig
+TARGET_KERNEL_HAVE_EXFAT := true
+TARGET_KERNEL_HAVE_NTFS := true
+LZMA_RAMDISK_TARGETS := recovery
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -65,7 +68,6 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 14042529792
 BOARD_FLASH_BLOCK_SIZE := 4096
 
 # Recovery
-BOARD_CUSTOM_BOOTIMG_MK := device/madcatz/mojo/shbootimg.mk
 BOARD_NO_SECURE_DISCARD := true
 TARGET_RECOVERY_FSTAB := device/madcatz/mojo/rootdir/etc/fstab.mojo
 
