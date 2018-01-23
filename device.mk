@@ -47,7 +47,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
+    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
+    frameworks/native/data/etc/android.software.app_widgets.xml:system/etc/permissions/android.software.app_widgets.xml
 
 # Audio
 PRODUCT_COPY_FILES += \
@@ -57,8 +58,27 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     audio.a2dp.default \
+    audio_policy.default \
+    audio.primary.default \
+    audio.primary.mojo \
     audio.r_submix.default \
-    audio.usb.default
+    audio.usb.default \
+    libaudiopolicyservice \
+    libaudiopolicymanager \
+    libaudiopolicymanagerdefault \
+    libtinyalsa \
+    libaudiospdif \
+    libaudioutils \
+    libaudioresampler \
+    tinymix \
+    tinycap
+
+USE_CUSTOM_AUDIO_POLICY := 1
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    media.stagefright.cache-params=10240/20480/15 \
+    persist.sys.media.avsync=true \
+    media.aac_51_output_enabled=true
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
@@ -111,14 +131,14 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    power.tegra
+    power.mojo
 
 # Shim
-PRODUCT_PACKAGES += \
-    libshim_vectorimpl
+# PRODUCT_PACKAGES += \
+#     libshim_vectorimpl
 
 # Stlport
 PRODUCT_PACKAGES += \
-    libstlport \
+    libstlport
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
