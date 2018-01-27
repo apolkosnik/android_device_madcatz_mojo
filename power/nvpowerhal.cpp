@@ -202,8 +202,8 @@ void common_power_init(__attribute__ ((unused)) struct power_module *module,
 
     // Boost to max frequency on initialization to decrease boot time
     pInfo->mTimeoutPoker->requestPmQosTimed("/dev/cpu_freq_min", pInfo->max_frequency,
-                                     s2ns(15));
-    ALOGI("Boosting cpu_freq_min to %d for 15 seconds to make boot faster", pInfo->max_frequency);
+                                     s2ns(60));
+    ALOGI("Boosting cpu_freq_min to %d for 60 seconds to make boot faster", pInfo->max_frequency);
 }
 
 void common_power_set_interactive(__attribute__ ((unused)) struct power_module *module,
@@ -293,7 +293,20 @@ void common_power_hint(__attribute__ ((unused)) struct power_module *module,
                                                  s2ns(3));
         break;
     case POWER_HINT_CPU_BOOST:
-        break;
+         // Boost to 1.8Ghz all core
+        pInfo->mTimeoutPoker->requestPmQosTimed("dev/cpu_freq_min",
+                                                 1810000,
+                                                 s2ns(3));
+        pInfo->mTimeoutPoker->requestPmQosTimed("dev/min_online_cpus",
+                                                 4,
+                                                 s2ns(3));
+        pInfo->mTimeoutPoker->requestPmQosTimed("/dev/gpu_freq_min",
+                                                 400000,
+                                                 s2ns(3));
+        pInfo->mTimeoutPoker->requestPmQosTimed("/dev/emc_freq_min",
+                                                 624000,
+                                                 s2ns(3));
+       break;
     default:
         ALOGE("Unknown power hint: 0x%x", hint);
         break;
