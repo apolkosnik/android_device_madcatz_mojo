@@ -129,9 +129,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.mojo
 
-# Shim
-# PRODUCT_PACKAGES += \
-#     libshim_vectorimpl
+# Shim - needed for legacy Tegra blobs compatibility
+PRODUCT_PACKAGES += \
+    libshim_vectorimpl
 
 # Stlport
 PRODUCT_PACKAGES += \

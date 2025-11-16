@@ -70,9 +70,14 @@ BOARD_FLASH_BLOCK_SIZE := 4096
 # Vendor
 TARGET_COPY_OUT_VENDOR := vendor
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_PARTITION_SIZE := 268435456
 
-# Modern Android compatibility
-# Removed pre-KitKat blob support as it's no longer needed for modern Android
+# Compatibility for legacy blobs
+BOARD_NEEDS_MEMORYHEAPPMEM := true
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
+    /system/bin/mediaserver=22 \
+    /system/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service=22
 
 # Recovery
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
@@ -88,9 +93,10 @@ BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_PHONY_TARGETS := true
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
-# Treble
+# Treble - partial support for legacy device
+# Note: Full Treble not supported on pre-Oreo hardware, using compatibility mode
+PRODUCT_FULL_TREBLE_OVERRIDE := false
 BOARD_VNDK_VERSION := current
-PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # Wifi related defines
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
