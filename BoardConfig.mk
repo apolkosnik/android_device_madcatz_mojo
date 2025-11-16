@@ -34,7 +34,7 @@ TARGET_NO_RADIOIMAGE := true
 TARGET_TEGRA_VERSION := t114
 
 # Kernel
-BOARD_KERNEL_CMDLINE := androidboot.hardware=mojo androidboot.selinux=permissive smsc95xx.boot_wol_config=0x07 smsc95xx.turbo_mode=N
+BOARD_KERNEL_CMDLINE := androidboot.hardware=mojo androidboot.selinux=enforcing smsc95xx.boot_wol_config=0x07 smsc95xx.turbo_mode=N
 TARGET_KERNEL_SOURCE := kernel/madcatz/mojo
 TARGET_KERNEL_CONFIG := lineageos_mojo_defconfig
 TARGET_KERNEL_HAVE_EXFAT := true
@@ -67,8 +67,12 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 805306368
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 14042529792
 BOARD_FLASH_BLOCK_SIZE := 4096
 
-# Pre-kitkat blob support
-TARGET_RELEASE_CPPFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
+# Vendor
+TARGET_COPY_OUT_VENDOR := vendor
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+
+# Modern Android compatibility
+# Removed pre-KitKat blob support as it's no longer needed for modern Android
 
 # Recovery
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
@@ -78,6 +82,15 @@ BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 # SELinux
 BOARD_SEPOLICY_DIRS += \
     device/madcatz/mojo/sepolicy
+
+# Build system
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_PHONY_TARGETS := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+
+# Treble
+BOARD_VNDK_VERSION := current
+PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 # Wifi related defines
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
@@ -90,4 +103,4 @@ WIFI_DRIVER_FW_PATH_PARAM        := "/sys/module/bcm43241/parameters/firmware_pa
 WIFI_DRIVER_FW_PATH_AP           := "/system/vendor/firmware/bcm43241/fw_bcmdhd_apsta.bin"
 WIFI_DRIVER_FW_PATH_STA          := "/system/vendor/firmware/bcm43241/fw_bcmdhd.bin"
 
-MALLOC_IMPL := dlmalloc
+MALLOC_SVELTE := true
